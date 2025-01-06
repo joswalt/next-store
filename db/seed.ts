@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import { hash } from "@/lib/encrypt";
+
 import sampleData from "./sample-data";
 
 async function main() {
@@ -18,9 +20,15 @@ async function main() {
   });
 
   // Create new users
-  await prisma.user.createMany({
-    data: sampleData.users,
-  });
+  const users = [];
+  for (let i = 0; i < sampleData.users.length; i++) {
+    users.push({
+      ...sampleData.users[i],
+      password: await hash(sampleData.users[i].password as string),
+    });
+    console.log(sampleData.users[i].password, await hash(sampleData.users[i].password as string));
+  }
+  await prisma.user.createMany({ data: users });
 
   console.log(`Database has been seeded. 🌱`);
 }
