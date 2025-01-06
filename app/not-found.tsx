@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+
 import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 
